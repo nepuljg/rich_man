@@ -473,12 +473,13 @@ void player_events(Player* player_ptr) {
 	//switch (player_ptr->square_veriety) {
 	//case GROUND_SQUARE:
 		//if (player_ptr->ground_square_ptr->owner == nullptr) {
+	HWND hnd = GetHWnd();
 			char buf[128] = { 0 };
 			sprintf_s(buf, "确定花费%f购买土地吗", 10);
-			int choice = MessageBox(NULL, CharToLPCTSTR(buf), _T("确认"), MB_OKCANCEL | MB_ICONQUESTION);
+			int choice = MessageBox(hnd, CharToLPCTSTR(buf), _T("确认"), MB_OKCANCEL | MB_ICONQUESTION);
 			if (choice == IDOK) {
 				if (player_ptr->money < player_ptr->ground_square_ptr->amount) {
-					MessageBox(NULL, _T("金额不够"), _T("确认"), MB_OKCANCEL | MB_ICONQUESTION);
+					MessageBox(hnd, _T("金额不够"), _T("确认"), MB_OKCANCEL | MB_ICONQUESTION);
 				}
 				else {
 					player_ptr->money -= player_ptr->ground_square_ptr->amount;
@@ -517,11 +518,11 @@ int main() {
 				draw_dice(throw_dice());
 				if (is_player_white_or_black) {
 					player_white.index = (dice_points + player_white.index) % 18;
-					//player_events(&player_white);
+					player_events(&player_white);
 				}
 				else {
 					player_black.index = (dice_points + player_black.index) % 18;
-					//player_events(&player_black);
+					player_events(&player_black);
 				}
 				is_player_white_or_black = !is_player_white_or_black;
 			}
