@@ -83,7 +83,8 @@ struct bank_square {
 
 Square arr_list_square[18];
 int dice_points;
-bool is_player_white_or_black = false;
+bool is_player_white_or_black = false;//判断回合数
+int stop_round = 0;
 
 struct bank_square arr_bank_square;                 //设置银行格1个
 struct penitentiary_square arr_penitentiary_square; //设置监狱格1个
@@ -254,6 +255,12 @@ void init_map() {
 
   player_black.square_veriety = SPACE_SQUARE;
   player_black.space_square_ptr = &arr_space_square[0];
+
+  player_white.money = 500;
+  player_black.money = 500;
+  
+  player_white.index = 0;
+  player_black.index = 0;
 }
 void draw_ground_square(ground_square *ptr) {
   setfillcolor(BLUE);
@@ -539,6 +546,7 @@ void player_events(Player *player_ptr) {
     break;
   }
   case PENITENTIARY_SQUARE: {
+    stop_round = 2;
     is_player_white_or_black = !is_player_white_or_black;
     MessageBox(hnd, _T("Sorry, 你需要暂停一回合"), _T("确定"),
                MB_OKCANCEL | MB_ICONQUESTION);
@@ -685,7 +693,13 @@ start:
           draw_map();
           player_events(&player_black);
         }
-        is_player_white_or_black = !is_player_white_or_black;
+        if (!stop_round) {
+            is_player_white_or_black = !is_player_white_or_black;
+        }
+        else {
+            stop_round--;
+        }
+
       }
     }
     if (is_player_white_or_black) outtextxy(40, 430, _T("游戏回合：白色玩家"));
